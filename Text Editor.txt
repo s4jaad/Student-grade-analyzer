@@ -1,0 +1,84 @@
+import java.util.Scanner;
+
+public class EnhancedGradeAnalyzer {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Student Grade Analyzer");
+
+        // Input the number of students with error handling
+        int numStudents = 0;
+        while (numStudents <= 0) {
+            try {
+                System.out.print("Enter the number of students: ");
+                numStudents = scanner.nextInt();
+
+                if (numStudents <= 0) {
+                    System.out.println("Please enter a valid number of students.");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Consume the invalid input
+            }
+        }
+
+        int[] grades = new int[numStudents];
+
+        // Input grades
+        for (int i = 0; i < numStudents; i++) {
+            try {
+                System.out.print("Enter grade for student " + (i + 1) + ": ");
+                grades[i] = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid grade.");
+                scanner.nextLine(); // Consume the invalid input
+                i--; // Retry input for the same student
+            }
+        }
+
+        // Analyze grades
+        int sum = 0;
+        int highestGrade = Integer.MIN_VALUE;
+        int lowestGrade = Integer.MAX_VALUE;
+
+        for (int grade : grades) {
+            sum += grade;
+
+            if (grade > highestGrade) {
+                highestGrade = grade;
+            }
+
+            if (grade < lowestGrade) {
+                lowestGrade = grade;
+            }
+        }
+
+        // Calculate average
+        double average = (double) sum / numStudents;
+
+        // Display results
+        System.out.println("\nGrade Analysis Results:");
+        System.out.println("Average Grade: " + average);
+        System.out.println("Highest Grade: " + highestGrade);
+        System.out.println("Lowest Grade: " + lowestGrade);
+
+        // Additional feature: Grade distribution
+        System.out.println("\nGrade Distribution:");
+        displayGradeDistribution(grades);
+
+        scanner.close();
+    }
+
+    private static void displayGradeDistribution(int[] grades) {
+        int[] frequency = new int[6]; // Assuming grades are between 1 and 5
+
+        for (int grade : grades) {
+            frequency[grade - 1]++;
+        }
+
+        for (int i = 0; i < frequency.length; i++) {
+            System.out.println("Grade " + (i + 1) + ": " + frequency[i] + " students");
+        }
+    }
+}
